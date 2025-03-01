@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'routes.dart';
 import 'package:provider/provider.dart';
@@ -6,20 +5,25 @@ import 'providers/auth_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 import 'providers/locale_provider.dart';
+import 'language_preference.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Required before async code in main()
+
+  Locale savedLocale = await LanguagePreference.getSavedLocale();
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(
           create: (_) => AuthProvider(),
         ),
-        ChangeNotifierProvider<LocaleProvider>(
-          create: (_) => LocaleProvider(),
+        ChangeNotifierProvider(
+          create: (_) => LocaleProvider(savedLocale),
         ),
-        // ... add other providers as needed
       ],
-      child: AdminPanelApp(),
+      child: AdminPanelApp(), // Removed locale argument
     ),
   );
 }
@@ -39,7 +43,7 @@ class AdminPanelApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: appRoutes,
-      locale: localeProvider.locale,
+      locale: localeProvider.locale, // Now using locale from provider
       supportedLocales: const [
         Locale('en', 'US'),
         Locale('ko', 'KR'),
