@@ -31,13 +31,13 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> userLogin(String userId, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$_baseUrl/login'),
+        Uri.parse('$_baseUrl/user/login'), // User login endpoint
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'email': email,
+          'userId': userId,
           'password': password,
         }),
       );
@@ -46,12 +46,32 @@ class AuthProvider with ChangeNotifier {
         final responseData = jsonDecode(response.body);
         await setAuthData(responseData['userId'], responseData['token']);
       } else {
-        final errorMessage = jsonDecode(response.body)['message'] ??
-            'Login failed with status code ${response.statusCode}';
-        throw Exception(errorMessage);
+        throw Exception('User login failed: ${response.body}');
       }
     } catch (e) {
-      throw Exception('Error during login: $e');
+      throw Exception('Error during user login: $e');
+    }
+  }
+
+  Future<void> adminLogin(String username, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/admin/login'), // Admin login endpoint
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username,
+          'password': password,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        await setAuthData(responseData['userId'], responseData['token']);
+      } else {
+        throw Exception('Admin login failed: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Error during admin login: $e');
     }
   }
 

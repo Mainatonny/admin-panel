@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
-import '../l10n/app_localizations.dart'; // Import localization
+import '../l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,20 +11,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _identifierController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _isAdminLogin = false; // Track login mode (Admin/User)
 
   Future<void> _login(BuildContext context) async {
     final auth = Provider.of<AuthProvider>(context, listen: false);
-    final email = _emailController.text.trim();
+    final identifier = _identifierController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
+    if (identifier.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(AppLocalizations.of(context)
-                .translate('enter_email_password'))),
+          content:
+              Text(AppLocalizations.of(context).translate('fill_all_fields')),
+        ),
       );
       return;
     }
@@ -34,14 +36,20 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      await auth.login(email, password);
+      if (_isAdminLogin) {
+        await auth.adminLogin(identifier, password); // Admin login
+      } else {
+        await auth.userLogin(identifier, password); // User login
+      }
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
                 AppLocalizations.of(context).translate('login_successful'))),
       );
-      // Navigate to the dashboard after successful login
-      Navigator.pushReplacementNamed(context, '/dashboard');
+
+      Navigator.pushReplacementNamed(
+          context, '/dashboard'); // Navigate after login
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -68,15 +76,43 @@ class _LoginScreenState extends State<LoginScreen> {
               AppLocalizations.of(context).translate('app_title'),
               style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 40),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: AppLocalizations.of(context).translate('email'),
-                prefixIcon: const Icon(Icons.email),
-              ),
+            const SizedBox(height: 20),
+
+            // Toggle switch for Admin/User mode
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(AppLocalizations.of(context).translate('login_as_user')),
+                Switch(
+                  value: _isAdminLogin,
+                  onChanged: (value) {
+                    setState(() {
+                      _isAdminLogin = value;
+                      _identifierController
+                          .clear(); // Clear field when toggling
+                      _passwordController.clear();
+                    });
+                  },
+                ),
+                Text(AppLocalizations.of(context).translate('login_as_admin')),
+              ],
             ),
             const SizedBox(height: 20),
+
+            // Input field for username/userID
+            TextField(
+              controller: _identifierController,
+              decoration: InputDecoration(
+                labelText: _isAdminLogin
+                    ? AppLocalizations.of(context).translate('admin_username')
+                    : AppLocalizations.of(context).translate('user_id'),
+                prefixIcon: const Icon(Icons.person),
+              ),
+              autofocus: true,
+            ),
+            const SizedBox(height: 20),
+
+            // Password input field
             TextField(
               controller: _passwordController,
               obscureText: true,
@@ -86,18 +122,14 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 30),
+
             _isLoading
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: () => _login(context),
-                    child:
-                        Text(AppLocalizations.of(context).translate('login')),
+                    child: Text(
+                        AppLocalizations.of(context).translate('login_button')),
                   ),
-            TextButton(
-              onPressed: () => Navigator.pushNamed(context, '/register'),
-              child: Text(
-                  AppLocalizations.of(context).translate('create_account')),
-            ),
           ],
         ),
       ),

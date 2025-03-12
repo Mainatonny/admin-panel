@@ -229,8 +229,17 @@
     "restore_completed_successfully": "Restore completed successfully",
     "restore_failed": "Restore failed",
     "choose_language": "Choose Language",
-    "notification_management": "Notification Management"
+    "notification_management": "Notification Management",
     
+    "fill_all_fields": "Please fill in all fields",
+    "login_successful": "Login successful",
+    "login_failed": "Login failed",
+    "admin_username": "Admin Username",
+    "user_id": "User ID",
+    "password": "Password",
+    "login_as_user": "Login as User",
+    "login_as_admin": "Login as Admin",
+    "login_button": "Login"
 
 
 

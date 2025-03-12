@@ -230,7 +230,17 @@
   "restore_failed": "복원 실패",
   "choose_language": "언어 선택",
 
-  "notification_management": "알림 관리"
+  "notification_management": "알림 관리",
+  "app_title": "관리자 패널 로그인",
+  "fill_all_fields": "모든 필드를 입력하세요",
+  "login_successful": "로그인 성공",
+  "login_failed": "로그인 실패",
+  "admin_username": "관리자 사용자 이름",
+  "user_id": "사용자 ID",
+  "password": "비밀번호",
+  "login_as_user": "사용자로 로그인",
+  "login_as_admin": "관리자로 로그인",
+  "login_button": "로그인"
 
    
   
