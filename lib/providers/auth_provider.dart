@@ -87,6 +87,32 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<void> register(String name, String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': name,
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      final responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 201) {
+        await setAuthData(responseData['userId'], responseData['token']);
+      } else {
+        final errorMessage = responseData['message'] ??
+            'Registration failed with status code ${response.statusCode}';
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      throw Exception('Error during registration: ${e.toString()}');
+    }
+  }
+
   Future<void> clearAuthData() async {
     try {
       final prefs = await SharedPreferences.getInstance();

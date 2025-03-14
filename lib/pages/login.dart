@@ -130,6 +130,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                         AppLocalizations.of(context).translate('login_button')),
                   ),
+            TextButton(
+              onPressed: () => Navigator.pushNamed(context, '/register'),
+              child: Text(
+                AppLocalizations.of(context).translate('create_account'),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
           ],
         ),
       ),

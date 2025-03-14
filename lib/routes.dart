@@ -9,6 +9,7 @@ import 'pages/lottery_management.dart';
 import 'pages/notification_management.dart';
 import 'pages/system_management.dart';
 import 'pages/login.dart';
+import 'pages/register.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
   '/dashboard': (context) => DashboardPage(),
@@ -21,4 +22,5 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/lottery': (context) => LotteryManagementPage(),
   '/notifications': (context) => NotificationManagementPage(),
   '/system': (context) => SystemManagementPage(),
+  '/register': (context) => RegisterScreen(),
 };
