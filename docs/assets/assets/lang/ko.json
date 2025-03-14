@@ -240,7 +240,18 @@
   "password": "비밀번호",
   "login_as_user": "사용자로 로그인",
   "login_as_admin": "관리자로 로그인",
-  "login_button": "로그인"
+  "login_button": "로그인",
+  "registration_successful": "회원가입에 성공했습니다!",
+  "registration_failed": "회원가입에 실패했습니다",
+  "create_account": "계정 생성",
+  "full_name": "전체 이름",
+  "email": "이메일",
+  "password": "비밀번호",
+  "confirm_password": "비밀번호 확인",
+  "required_field": "필수 항목",
+  "invalid_email": "유효하지 않은 이메일",
+  "min_6_characters": "최소 6자 이상",
+  "passwords_must_match": "비밀번호가 일치해야 합니다"
 
    
   

@@ -239,7 +239,19 @@
     "password": "Password",
     "login_as_user": "Login as User",
     "login_as_admin": "Login as Admin",
-    "login_button": "Login"
+    "login_button": "Login",
+    "registration_successful": "Registration successful!",
+    "registration_failed": "Registration failed",
+    "create_account": "Create Account",
+    "full_name": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "required_field": "Required field",
+    "invalid_email": "Invalid email",
+    "min_6_characters": "Min 6 characters",
+    "passwords_must_match": "Passwords must match",
+    "fill_all_fields_select_file": "Please fill in all fields and select a file"
 
 
 
