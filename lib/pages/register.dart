@@ -18,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   static const Color backgroundLight = Color(0xFFF8F9FE);
 
   final _formKey = GlobalKey<FormState>();
+  final _userIdController = TextEditingController(); // User ID input
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -34,6 +35,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       // Register using AuthProvider
       await Provider.of<AuthProvider>(context, listen: false).register(
+        _userIdController.text, // User-defined ID
         _nameController.text,
         _emailController.text,
         _passwordController.text,
@@ -52,7 +54,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // Navigate to home screen
       Navigator.pushReplacementNamed(context, '/dashboard');
     } catch (e) {
-      // Handle errors (display error message)
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -70,6 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
+    _userIdController.dispose();
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -82,21 +84,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        elevation: 0,
         title: Text(
           AppLocalizations.of(context).translate('create_account'),
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
-        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
             colors: [backgroundLight, Colors.white],
           ),
         ),
@@ -106,6 +101,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
             key: _formKey,
             child: ListView(
               children: [
+                _buildInputField(
+                  controller: _userIdController,
+                  label: AppLocalizations.of(context).translate('user_id'),
+                  icon: Icons.account_circle,
+                  validator: (v) => v!.isEmpty
+                      ? AppLocalizations.of(context).translate('required_field')
+                      : null,
+                ),
+                const SizedBox(height: 20),
                 _buildInputField(
                   controller: _nameController,
                   label: AppLocalizations.of(context).translate('full_name'),

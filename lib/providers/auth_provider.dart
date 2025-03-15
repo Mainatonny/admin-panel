@@ -87,12 +87,14 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> register(String name, String email, String password) async {
+  Future<void> register(
+      String userId, String name, String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$_baseUrl/register'),
+        Uri.parse('$_baseUrl/user/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
+          'userId': userId, // Ensure userId is passed from Flutter UI
           'name': name,
           'email': email,
           'password': password,
